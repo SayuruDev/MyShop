@@ -1,11 +1,12 @@
 {
   "name": "myshop",
-  "type":"module",
+  "type": "module",
   "version": "1.0.0",
   "description": "My 3rd Ecomm Project",
   "main": "app.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node backend/app.js",
+    "dev": "nodemon backend/app.js"
   },
   "author": "Sayuru Samarawickrama",
   "license": "ISC",
@@ -13,5 +14,8 @@
     "dotenv": "^16.5.0",
     "express": "^5.1.0",
     "mongoose": "^8.15.1"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.10"
   }
 }
