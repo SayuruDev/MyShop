@@ -1,5 +1,6 @@
 {
   "name": "myshop",
+  "type":"module",
   "version": "1.0.0",
   "description": "My 3rd Ecomm Project",
   "main": "app.js",
