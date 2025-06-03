@@ -1,7 +1,7 @@
 {
   "name": "myshop",
   "version": "1.0.0",
-  "description": "Sayurus EShop to Learn MERN Stack",
+  "description": "My 3rd Ecomm Project",
   "main": "app.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
