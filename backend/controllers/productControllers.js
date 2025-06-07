@@ -50,3 +50,20 @@ export const updateProduct = async (req, res) => {
     product,
   });
 };
+
+// Delete product   =>  /api/v1/products/:idAdd commentMore actions
+export const deleteProduct = async (req, res) => {
+  const product = await Product.findById(req?.params?.id);
+
+  if (!product) {
+    return res.status(404).json({
+      error: "Product not found",
+    });
+  }
+
+  await product.deleteOne();
+
+  res.status(200).json({
+    message: "Product Deleted",
+  });
+};
