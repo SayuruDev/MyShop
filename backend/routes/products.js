@@ -5,6 +5,7 @@ import {
   getProducts,
   newProduct,
   updateProduct,
+  createProductReview,
 } from "../controllers/productControllers.js";
 import { authorizeRoles, isAuthenticatedUser } from "../middlewares/auth.js";
 const router = express.Router();
@@ -20,6 +21,10 @@ router.route("/admin/products/:id")
 
 router.route("/admin/products/:id")
 .delete(isAuthenticatedUser,authorizeRoles("admin"),deleteProduct);
+
+router
+  .route("/reviews")
+  .put(isAuthenticatedUser, createProductReview);
 
 export default router;
 
