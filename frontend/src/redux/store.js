@@ -1,3 +1,4 @@
+// Store is updated
 import { configureStore } from "@reduxjs/toolkit";
 
 import userReducer from "./features/userSlice";
