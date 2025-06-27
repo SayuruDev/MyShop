@@ -12,6 +12,7 @@ import Login from "./components/auth/Login";
 import Register from "./components/auth/Register";
 import Profile from "./components/user/Profile";
 import UpdateProfile from "./components/user/UpdateProfile";
+import ProtectedRoute from "./components/auth/ProtectedRoute";
 
 function App() {
   return (
@@ -26,11 +27,12 @@ function App() {
             <Route path="/product/:id" element={<ProductDetails />} />
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
-             <Route
+              <Route
               path="/me/profile"
-              element={        
+              element={
+                <ProtectedRoute>
                   <Profile />
-                
+                </ProtectedRoute>
               }
             />
             <Route
