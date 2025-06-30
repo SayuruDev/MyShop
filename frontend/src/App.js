@@ -14,7 +14,7 @@ import Profile from "./components/user/Profile";
 import UpdateProfile from "./components/user/UpdateProfile";
 import ProtectedRoute from "./components/auth/ProtectedRoute";
 import UploadAvatar from "./components/user/UploadAvatar";
-
+import Cart from "./components/cart/Cart";
 
 function App() {
   return (
@@ -29,6 +29,9 @@ function App() {
             <Route path="/product/:id" element={<ProductDetails />} />
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
+
+           
+            
 
             <Route
               path="/me/profile"
@@ -57,7 +60,9 @@ function App() {
               }
             />
 
-           
+            
+
+            <Route path="/cart" element={<Cart />} />
           </Routes>
         </div>
 
