@@ -10,6 +10,7 @@ const Shipping = () => {
   const countriesList = Object.values(countries);
 
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   
 
   const [address, setAddress] = useState("");
@@ -34,6 +35,7 @@ const Shipping = () => {
     e.preventDefault();
 
     dispatch(saveShippingInfo({ address, city, phoneNo, zipCode, country }));
+     navigate("/confirm_order");
     
   };
 

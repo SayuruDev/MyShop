@@ -43,10 +43,9 @@ const Cart = () => {
     dispatch(removeCartItem(id));
   };
 
-    const checkoutHandler = () => {
+  const checkoutHandler = () => {
     navigate("/shipping");
   };
-
 
   return (
     <>
@@ -147,7 +146,7 @@ const Cart = () => {
                 <hr />
                 <button
                   id="checkout_btn"
-                  className="btn btn-primary w-100"Add commentMore actions
+                  className="btn btn-primary w-100"
                   onClick={checkoutHandler}
                 >
                   Check out
