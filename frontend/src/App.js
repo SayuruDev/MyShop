@@ -15,6 +15,7 @@ import UpdateProfile from "./components/user/UpdateProfile";
 import ProtectedRoute from "./components/auth/ProtectedRoute";
 import UploadAvatar from "./components/user/UploadAvatar";
 import Cart from "./components/cart/Cart";
+import Shipping from "./components/cart/Shipping";
 
 function App() {
   return (
@@ -63,6 +64,14 @@ function App() {
             
 
             <Route path="/cart" element={<Cart />} />
+            <Route
+              path="/shipping"
+              element={
+                <ProtectedRoute>
+                  <Shipping />
+                </ProtectedRoute>
+              }
+            />
           </Routes>
         </div>
 
