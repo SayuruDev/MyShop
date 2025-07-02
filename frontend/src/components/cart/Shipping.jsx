@@ -6,13 +6,11 @@ import { useNavigate } from "react-router-dom";
 import MetaData from "../layout/MetaData";
 import CheckoutSteps from "./CheckoutSteps";
 
-
 const Shipping = () => {
   const countriesList = Object.values(countries);
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  
 
   const [address, setAddress] = useState("");
   const [city, setCity] = useState("");
@@ -36,18 +34,16 @@ const Shipping = () => {
     e.preventDefault();
 
     dispatch(saveShippingInfo({ address, city, phoneNo, zipCode, country }));
-     navigate("/confirm_order");
-    
+    navigate("/confirm_order");
   };
-
-  
 
   return (
     <>
       <MetaData title={"Shipping Info"} />
-         <CheckoutSteps shipping />
 
-         <div className="row wrapper mb-5">
+      <CheckoutSteps shipping />
+
+      <div className="row wrapper mb-5">
         <div className="col-10 col-lg-5">
           <form className="shadow rounded bg-body" onSubmit={submiHandler}>
             <h2 className="mb-4">Shipping Info</h2>
