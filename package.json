@@ -10,7 +10,7 @@
     "prod": "SET NODE_ENV=PRODUCTION& nodemon backend/app.js",
     "seeder": "node backend/seeder/seeder.js"
   },
-  "author": "Sayuru Samarawickrama1",
+  "author": "Sayuru Samarawickrama.",
   "license": "ISC",
   "dependencies": {
     "bcryptjs": "^3.0.2",
