@@ -3,8 +3,8 @@ import Order from "../models/order.js";
 
 import Stripe from "stripe";
 const stripe = Stripe(process.env.STRIPE_SECRET_KEY);
-
 // Create stripe checkout session   =>  /api/v1/payment/checkout_session
+// Tax values are taken from keys in stripe - But i couldnt do it . use the sample
 export const stripeCheckoutSession = catchAsyncErrors(
   async (req, res, next) => {
     const body = req?.body;
@@ -12,7 +12,7 @@ export const stripeCheckoutSession = catchAsyncErrors(
     const line_items = body?.orderItems?.map((item) => {
       return {
         price_data: {
-          currency: "usd",
+          currency: "USD",
           product_data: {
             name: item?.name,
             images: [item?.image],
