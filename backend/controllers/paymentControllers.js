@@ -3,34 +3,41 @@ import Order from "../models/order.js";
 
 import Stripe from "stripe";
 const stripe = Stripe(process.env.STRIPE_SECRET_KEY);
-// Create stripe checkout session   =>  /api/v1/payment/checkout_session
-// Tax values are taken from keys in stripe - But i couldnt do it . use the sample
+
+// ✅ Static values
+const HARDCODED_TAX_RATE = 0.25;       // 25% tax
+const FREE_SHIPPING_AMOUNT = 0;        // $0 shipping
+const STANDARD_SHIPPING_AMOUNT = 20;   // $20 shipping
+
+// Create Stripe Checkout Session => /api/v1/payment/checkout_session
 export const stripeCheckoutSession = catchAsyncErrors(
   async (req, res, next) => {
     const body = req?.body;
 
-    const line_items = body?.orderItems?.map((item) => {
-      return {
-        price_data: {
-          currency: "USD",
-          product_data: {
-            name: item?.name,
-            images: [item?.image],
-            metadata: { productId: item?.product },
-          },
-          unit_amount: item?.price * 100,
+    const line_items = body?.orderItems?.map((item) => ({
+      price_data: {
+        currency: "USD",
+        product_data: {
+          name: item?.name,
+          images: [item?.image],
+          metadata: { productId: item?.product },
         },
-        tax_rates: ["txr_1LlBSDA7jBHqn8SB8z4waAin"],
-        quantity: item?.quantity,
-      };
-    });
+        unit_amount: item?.price * 100,
+      },
+      quantity: item?.quantity,
+    }));
 
     const shippingInfo = body?.shippingInfo;
 
-    const shipping_rate =
-      body?.itemsPrice >= 200
-        ? "shr_1LlBW5A7jBHqn8SBG2fsAWwT"
-        : "shr_1NQYwEA7jBHqn8SBs5alau8k";
+    // ✅ Determine shipping amount
+    const shippingAmount =
+      body?.itemsPrice >= 200 ? FREE_SHIPPING_AMOUNT : STANDARD_SHIPPING_AMOUNT;
+
+    // ✅ Calculate tax manually
+    const taxAmount = body?.itemsPrice * HARDCODED_TAX_RATE;
+
+    // ✅ Calculate total
+    const totalAmount = body?.itemsPrice + taxAmount + shippingAmount;
 
     const session = await stripe.checkout.sessions.create({
       payment_method_types: ["card"],
@@ -39,21 +46,21 @@ export const stripeCheckoutSession = catchAsyncErrors(
       customer_email: req?.user?.email,
       client_reference_id: req?.user?._id?.toString(),
       mode: "payment",
-      metadata: { ...shippingInfo, itemsPrice: body?.itemsPrice },
-      shipping_options: [
-        {
-          shipping_rate,
-        },
-      ],
+      metadata: {
+        ...shippingInfo,
+        itemsPrice: body?.itemsPrice,
+        taxAmount,
+        shippingAmount,
+        totalAmount,
+      },
       line_items,
     });
 
-    res.status(200).json({
-      url: session.url,
-    });
+    res.status(200).json({ url: session.url });
   }
 );
 
+// Helper to extract order items from Stripe line items
 const getOrderItems = async (line_items) => {
   return new Promise((resolve, reject) => {
     let cartItems = [];
@@ -77,7 +84,7 @@ const getOrderItems = async (line_items) => {
   });
 };
 
-// Create new order after payment   =>  /api/v1/payment/webhook
+// Stripe Webhook => /api/v1/payment/webhook
 export const stripeWebhook = catchAsyncErrors(async (req, res, next) => {
   try {
     const signature = req.headers["stripe-signature"];
@@ -98,10 +105,11 @@ export const stripeWebhook = catchAsyncErrors(async (req, res, next) => {
       const orderItems = await getOrderItems(line_items);
       const user = session.client_reference_id;
 
-      const totalAmount = session.amount_total / 100;
-      const taxAmount = session.total_details.amount_tax / 100;
-      const shippingAmount = session.total_details.amount_shipping / 100;
-      const itemsPrice = session.metadata.itemsPrice;
+      // ✅ Retrieve metadata values
+      const itemsPrice = parseFloat(session.metadata.itemsPrice);
+      const taxAmount = parseFloat(session.metadata.taxAmount);
+      const shippingAmount = parseFloat(session.metadata.shippingAmount);
+      const totalAmount = parseFloat(session.metadata.totalAmount);
 
       const shippingInfo = {
         address: session.metadata.address,
@@ -134,5 +142,6 @@ export const stripeWebhook = catchAsyncErrors(async (req, res, next) => {
     }
   } catch (error) {
     console.log("Error => ", error);
+    res.status(400).json({ success: false, error: error.message });
   }
 });
