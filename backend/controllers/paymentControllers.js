@@ -16,7 +16,7 @@ export const stripeCheckoutSession = catchAsyncErrors(
 
     const line_items = body?.orderItems?.map((item) => ({
       price_data: {
-        currency: "USD",
+        currency: "usd",
         product_data: {
           name: item?.name,
           images: [item?.image],
@@ -142,6 +142,6 @@ export const stripeWebhook = catchAsyncErrors(async (req, res, next) => {
     }
   } catch (error) {
     console.log("Error => ", error);
-    res.status(400).json({ success: false, error: error.message });
+    
   }
 });
