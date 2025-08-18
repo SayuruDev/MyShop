@@ -4,7 +4,7 @@ import Order from "../models/order.js";
 import Stripe from "stripe";
 const stripe = Stripe(process.env.STRIPE_SECRET_KEY);
 
-// ✅ Static values
+
 const HARDCODED_TAX_RATE = 0.25;       // 25% tax
 const FREE_SHIPPING_AMOUNT = 0;        // $0 shipping
 const STANDARD_SHIPPING_AMOUNT = 20;   // $20 shipping
@@ -41,7 +41,7 @@ export const stripeCheckoutSession = catchAsyncErrors(
 
     const session = await stripe.checkout.sessions.create({
       payment_method_types: ["card"],
-      success_url: `${process.env.FRONTEND_URL}/me/orders`,
+      success_url: `${process.env.FRONTEND_URL}/me/orders?order_success=true`,
       cancel_url: `${process.env.FRONTEND_URL}`,
       customer_email: req?.user?.email,
       client_reference_id: req?.user?._id?.toString(),
