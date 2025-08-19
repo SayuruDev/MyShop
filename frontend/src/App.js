@@ -19,6 +19,8 @@ import Shipping from "./components/cart/Shipping";
 import ConfirmOrder from "./components/cart/ConfirmOrder";
 import PaymentMethod from "./components/cart/PaymentMethod";
 import MyOrders from "./components/order/MyOrders";
+import OrderDetails from "./components/order/OrderDetails";
+import Invoice from "./components/invoice/Invoice";
 
 function App() {
   return (
@@ -35,8 +37,6 @@ function App() {
             <Route path="/register" element={<Register />} />
 
            
-            
-
             <Route
               path="/me/profile"
               element={
@@ -64,7 +64,14 @@ function App() {
               }
             />
 
-            
+            <Route
+              path="/me/update_password"
+              element={
+                <ProtectedRoute>
+                
+                </ProtectedRoute>
+              }
+            />
 
             <Route path="/cart" element={<Cart />} />
             <Route
@@ -83,7 +90,7 @@ function App() {
                 </ProtectedRoute>
               }
             />
-              <Route
+            <Route
               path="/payment_method"
               element={
                 <ProtectedRoute>
@@ -91,11 +98,30 @@ function App() {
                 </ProtectedRoute>
               }
             />
-             <Route
+
+            <Route
               path="/me/orders"
               element={
                 <ProtectedRoute>
                   <MyOrders />
+                </ProtectedRoute>
+              }
+            />
+
+            <Route
+              path="/me/order/:id"
+              element={
+                <ProtectedRoute>
+                  <OrderDetails />
+                </ProtectedRoute>
+              }
+            />
+
+            <Route
+              path="/invoice/order/:id"
+              element={
+                <ProtectedRoute>
+                  <Invoice />
                 </ProtectedRoute>
               }
             />
