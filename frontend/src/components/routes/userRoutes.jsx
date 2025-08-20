@@ -10,6 +10,7 @@ import ProtectedRoute from "../auth/ProtectedRoute";
 import UploadAvatar from "../user/UploadAvatar";
 
 
+
 import Cart from "../cart/Cart";
 import Shipping from "../cart/Shipping";
 import ConfirmOrder from "../cart/ConfirmOrder";
@@ -27,7 +28,7 @@ const userRoutes = () => {
       <Route path="/login" element={<Login />} />
       <Route path="/register" element={<Register />} />
 
-      
+     
 
       <Route
         path="/me/profile"
@@ -56,7 +57,7 @@ const userRoutes = () => {
         }
       />
 
-    
+      
 
       <Route path="/cart" element={<Cart />} />
       <Route
