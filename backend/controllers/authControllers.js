@@ -43,7 +43,6 @@ export const loginUser = catchAsyncErrors(async (req, res, next) => {
   }
 
   sendToken(user, 200, res);
-  
 });
 
 // Logout user   =>  /api/v1/logout
@@ -91,7 +90,7 @@ export const forgotPassword = catchAsyncErrors(async (req, res, next) => {
   await user.save();
 
   // Create reset password url
-  const resetUrl = `${process.env.FRONTEND_URL}/api/v1/password/reset/${resetToken}`;
+  const resetUrl = `${process.env.FRONTEND_URL}/password/reset/${resetToken}`;
 
   const message = getResetPasswordTemplate(user?.name, resetUrl);
 
@@ -112,6 +111,43 @@ export const forgotPassword = catchAsyncErrors(async (req, res, next) => {
     await user.save();
     return next(new ErrorHandler(error?.message, 500));
   }
+});
+
+// Reset password   =>  /api/v1/password/reset/:token
+export const resetPassword = catchAsyncErrors(async (req, res, next) => {
+  // Hash the URL Token
+  const resetPasswordToken = crypto
+    .createHash("sha256")
+    .update(req.params.token)
+    .digest("hex");
+
+  const user = await User.findOne({
+    resetPasswordToken,
+    resetPasswordExpire: { $gt: Date.now() },
+  });
+
+  if (!user) {
+    return next(
+      new ErrorHandler(
+        "Password reset token is invalid or has been expired",
+        400
+      )
+    );
+  }
+
+  if (req.body.password !== req.body.confirmPassword) {
+    return next(new ErrorHandler("Passwords does not match", 400));
+  }
+
+  // Set the new password
+  user.password = req.body.password;
+
+  user.resetPasswordToken = undefined;
+  user.resetPasswordExpire = undefined;
+
+  await user.save();
+
+  sendToken(user, 200, res);
 });
 
 // Get current user profile  =>  /api/v1/me
@@ -158,7 +194,7 @@ export const updateProfile = catchAsyncErrors(async (req, res, next) => {
   });
 });
 
-///Get all Users - ADMIN  =>  /api/v1/admin/users
+// Get all Users - ADMIN  =>  /api/v1/admin/users
 export const allUsers = catchAsyncErrors(async (req, res, next) => {
   const users = await User.find();
 
@@ -209,7 +245,10 @@ export const deleteUser = catchAsyncErrors(async (req, res, next) => {
     );
   }
 
-  // TODO - Remove user avatar from cloudinary
+  // Remove user avatar from cloudinary
+  if (user?.avatar?.public_id) {
+    await delete_file(user?.avatar?.public_id);
+  }
 
   await user.deleteOne();
 
