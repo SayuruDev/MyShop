@@ -28,8 +28,7 @@ const userRoutes = () => {
       <Route path="/login" element={<Login />} />
       <Route path="/register" element={<Register />} />
 
-     
-
+      
       <Route
         path="/me/profile"
         element={
@@ -57,7 +56,14 @@ const userRoutes = () => {
         }
       />
 
-      
+      <Route
+        path="/me/update_password"
+        element={
+          <ProtectedRoute>
+          
+          </ProtectedRoute>
+        }
+      />
 
       <Route path="/cart" element={<Cart />} />
       <Route
