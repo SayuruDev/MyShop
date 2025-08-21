@@ -55,11 +55,11 @@ const Invoice = () => {
             <div id="company" className="clearfix">
               <div>ShopIT</div>
               <div>
-                455 Foggy Heights,
+                4000 Victoria Park Avenue,
                 <br />
-                AZ 85004, US
+                Toronto, ON , Canada
               </div>
-              <div>(602) 519-0450</div>
+              <div>(416) 433-3134</div>
               <div>
                 <a href="mailto:info@shopit.com">info@shopit.com</a>
               </div>
